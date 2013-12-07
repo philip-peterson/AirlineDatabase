@@ -128,6 +128,26 @@ ALTER TABLE FlightLeg
          LegNumber >= 1
       );
 
+ALTER TABLE FlightLeg
+   ADD CONSTRAINT DateMatchesDepartureDate
+      CHECK (
+         TheDate = (
+            SELECT
+               DATE(ScheduleTime)
+            FROM
+               Departure
+            WHERE
+               LegNumberRef = LegNumber
+               AND TripNumberRef = TripNumber
+         )
+      );
+
+ALTER TABLE Airport
+   ADD CONSTRAINT UpperCase
+   CHECK (
+      AirportCode = UPPER(AirportCode)
+   );
+
 ALTER TABLE Airport
    ADD CONSTRAINT Valid_State
    CHECK (

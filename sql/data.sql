@@ -1,9 +1,9 @@
 DELETE FROM Trip;
-DELETE FROM Airport;
 DELETE FROM Departure;
 DELETE FROM Arrival;
 DELETE FROM FlightLeg;
 DELETE FROM Airplane;
+DELETE FROM Airport;
 
 INSERT INTO Airplane
    (ID, Type, NumberOfSeats)
