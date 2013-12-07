@@ -23,8 +23,21 @@ function getBool($x) {
    return false;
 }
 
-function getFlightsFrom($airportCode, $date, $fuzzyDate) {
-   $params = array($airportCode, $date);
+function prtChecked($field) {
+   echo getBool($field) ? ' checked' : '';
+}
+
+function prtField($field) {
+   if (isset($_REQUEST[$field])) {
+      echo htmlentities($_REQUEST[$field]);
+   }
+   else {
+      echo '';
+   }
+}
+
+function getTripsFromTo($from, $to, $date, $fuzzyDate) {
+   $params = array($from, $to, $to, $date);
    
    if ($fuzzyDate) {
       array_push($params, $date);
@@ -35,21 +48,46 @@ function getFlightsFrom($airportCode, $date, $fuzzyDate) {
    }
 
    $q = <<<SQL
-SELECT
-   ScheduleTime,
-   LegNumberRef,
-   TripNumberRef
-FROM
-   Departure
-WHERE
-   AirportCode = ?
-   AND DATE(ScheduleTime) $dateShebang
+      SELECT
+         TripNumber,
+         TheDate,
+         DATE_FORMAT(ScheduleTime, '%l:%i %p') AS ScheduleTime,
+         Departure,
+         Destination,
+         Price,
+         NumLegs,
+         LegNumber,
+         NumSeatsAvailable
+      FROM
+         Trip
+         JOIN FlightLeg USING (TripNumber)
+         JOIN Departure ON (TripNumber = TripNumberRef AND LegNumber = LegNumberRef)
+      WHERE
+         Airline='Errfoil'
+         AND Departure = UPPER(?)
+         AND (
+            Destination = UPPER(?)
+            OR ? = ''
+         )
+         AND LegNumber = 1
+         AND TheDate $dateShebang
 SQL;
 
    return runQuery($q, $params);
 }
 
-function getFlightsFromTo($airportCode, $departDate, $fuzzyDate) {
-   $res = getFlightsFrom($airportCode, $departDate, $fuzzyDate);
-   return $res;
+function getTripDetails($id) {
+   
+   $q = <<<SQL
+      SELECT
+         *
+      FROM
+         Trip
+         JOIN FlightLeg USING (TripNumber)
+      WHERE
+         Airline='Errfoil'
+         TripId = ?
+SQL;
+
+   return runQuery($q, array($id));
 }

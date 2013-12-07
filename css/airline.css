@@ -2,6 +2,11 @@
    font-family: sans-serif;
 }
 
+input[type=submit] {
+   font-size: 26pt;
+   -webkit-appearance: button;
+}
+
 form input[type=text] {
    display: block;
    margin: 1em 0px;
