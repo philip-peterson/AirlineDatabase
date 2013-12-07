@@ -30,7 +30,7 @@ CREATE TABLE Arrival (
 CREATE TABLE Departure LIKE Arrival;
 
 CREATE TABLE Trip (
-   TripNumber INTEGER PRIMARY KEY
+   TripNumber INTEGER AUTO_INCREMENT PRIMARY KEY
    , Airline VARCHAR(60)
    , Price DECIMAL(6,2)
    , NumLegs INTEGER
@@ -39,7 +39,7 @@ CREATE TABLE Trip (
 );
 
 CREATE TABLE Reservation (
-   ReservationNum INTEGER PRIMARY KEY
+   ReservationNum INTEGER AUTO_INCREMENT PRIMARY KEY
    , Email VARCHAR(40)
    , Name VARCHAR(100)
    , Addr VARCHAR(150)
@@ -57,7 +57,7 @@ CREATE TABLE FlightLeg (
 );
 
 CREATE TABLE Payment (
-   TransactionNumber INTEGER PRIMARY KEY
+   TransactionNumber INTEGER AUTO_INCREMENT PRIMARY KEY
    , PaymentDate DATE
    , Account DECIMAL(20,0)
    , NameOnAccount VARCHAR(100)

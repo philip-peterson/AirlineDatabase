@@ -1,3 +1,8 @@
+<?php
+
+require_once('functions.php');
+
+?>
 <!doctype html>
 <html>
 <head>
@@ -19,17 +24,15 @@
 
 <?php
 
-function toBool($x) {
-   return filter_var($x, FILTER_VALIDATE_BOOLEAN);
-}
 
 switch (isset($_REQUEST['act'])) {
-   'search':
-      var_dump(getFlights(
+   case 'search':
+      var_dump(getFlightsFromTo(
          $_REQUEST['source'],
          $_REQUEST['depart-date'],
-         toBool($_REQUEST['depart-flex']
-      )));
+         getBool('depart-flex')
+      ));
+      echo "blah";
 
    default:
 ?>
