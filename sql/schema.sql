@@ -21,7 +21,7 @@ CREATE TABLE Airplane (
 
 CREATE TABLE Arrival (
    AirportCode CHAR(4)
-   , ScheduleTime TIME
+   , ScheduleTime DATETIME
    , LegNumberRef INTEGER
    , TripNumberRef INTEGER
    , PRIMARY KEY (LegNumberRef, TripNumberRef)
