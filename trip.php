@@ -31,10 +31,6 @@ list($trip) = getTripDetails($_GET['id']);
       <td><?php echo $trip['TripNumber']; ?></td>
    </tr>
    <tr>
-      <th>Seats Available</th>
-      <td><?php echo $trip['NumSeatsAvailable'];      ?></td>
-   </tr>
-   <tr>
       <th>Price</th>
       <td>$<?php echo $trip['Price'];      ?></td>
    </tr>
@@ -99,9 +95,17 @@ foreach ($legs as $leg) {
 
 <h2>Ticket Purchase</h2>
 
-<form method="POST">
+
+<form action="buy.php" method="POST">
    <input type="hidden" name="id" value="<?php prtField('id'); ?>">
    <input type="hidden" name="act" value="buyticket">
+
+      <input type="text" name="name" id="name" placeholder="name on account">
+      <input type="text" name="acct_no" id="acct_no" placeholder="account number">
+      <input type="text" name="email" id="email" placeholder="email address">
+      <input type="text" name="addr" id="addr" placeholder="physical address">
+      <input type="text" name="phone" id="phone" placeholder="phone number">
+
    <input type="submit" value="Book Ticket">
 </form>
 

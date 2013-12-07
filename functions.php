@@ -140,3 +140,74 @@ SQL;
    return $newlegs;
 
 }
+function placeOrder ($name, $address, $account, $email, $phone, $tripID) {
+   
+   $numseats = runQuery("SELECT MIN(NumSeatsAvailable) AS x FROM FlightLeg WHERE TripNumber = ?", array($tripID));
+   if ((int)$numseats[0]['x'] <= 0) return NULL;
+
+   $sql = <<<SQL
+      INSERT INTO Reservation (
+         Email,
+         Name,
+         Addr,
+         PhoneNum,
+         ReserveDate
+      ) VALUES (
+         ?,
+         ?,
+         ?,
+         ?,
+         NOW()
+      );
+SQL;
+
+   $pdo = getConn();
+   $pdo->beginTransaction();
+
+   $stmt = $pdo->prepare($sql, array());
+   $stmt->execute(array($email, $name, $address, $phone));
+   $reservID = $pdo->lastInsertId();
+
+   $sql = <<<SQL
+     INSERT INTO Payment
+        (PaymentDate, Account, NameOnAccount, ReservRef, TripRef)
+     VALUES
+        (
+           NOW(),
+           ?,
+           ?,
+           ?,
+           ?
+        );
+SQL;
+
+   $stmt = $pdo->prepare($sql, array());
+   $stmt->execute(array($account, $name, $reservID, $tripID));
+
+   $transID = $pdo->lastInsertId();
+
+   $stmt = $pdo->prepare("UPDATE FlightLeg SET NumSeatsAvailable=NumSeatsAvailable-1 WHERE TripNumber=?", array());
+   $stmt->execute(array($tripID));
+
+   if (!$pdo->commit()) {
+      return NULL;
+   }
+
+   return array($reservID, $transID);
+
+}
+
+function getEmptyFlights() {
+   $q = <<<SQL
+      SELECT
+         LegNumber,
+         TripNumber
+      FROM
+         FlightLeg
+      WHERE
+         
+         AND Airline = 'Errfoil'
+SQL;
+
+   return runQuery($q, array($tripID));
+}
