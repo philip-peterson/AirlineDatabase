@@ -1,0 +1,17 @@
+form input[type=text] {
+   display: block;
+   margin: 1em 0px;
+}
+
+form {
+   display: table;
+   border-spacing: 10px;
+   border-collapse: separate;
+}
+
+form div {
+   display: table-cell;
+   padding: 1em;
+   border: 1px solid #aaa;
+   height: 100%;
+}
