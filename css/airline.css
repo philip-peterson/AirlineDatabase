@@ -1,9 +1,15 @@
+* {
+   font-family: sans-serif;
+}
+
 form input[type=text] {
    display: block;
    margin: 1em 0px;
 }
 
 form {
+   margin: 0px auto;
+   margin-top: 3em;
    display: table;
    border-spacing: 10px;
    border-collapse: separate;
@@ -14,4 +20,13 @@ form div {
    padding: 1em;
    border: 1px solid #aaa;
    height: 100%;
+}
+
+table {
+   border-collapse: collapse;
+   width: 100%;
+}
+
+table td, table th {
+   padding: .5em;
 }
