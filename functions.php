@@ -76,18 +76,67 @@ SQL;
    return runQuery($q, $params);
 }
 
-function getTripDetails($id) {
+function getTripDetails($tripID) {
+   $q = <<<SQL
+      SELECT
+         TripNumber,
+         Price,
+         Departure,
+         Destination,
+         NumLegs
+      FROM
+         Trip
+      WHERE
+         TripNumber = ?
+         AND Airline = 'Errfoil'
+SQL;
+
+   return runQuery($q, array($tripID));
+}
+
+function getArrivalOrDeparture($arrivalOrDeparture, $tripID, $legNumber) {
+   $table = (($arrivalOrDeparture === 'arrival') ? 'Arrival' : 'Departure');
+   $q = <<<SQL
+      SELECT
+         AirportCode,
+         DATE_FORMAT(ScheduleTime, "%l:%i %p") AS TheTime,
+         DATE_FORMAT(ScheduleTime, "%M %e, %Y") AS TheDate
+      FROM
+         $table
+      WHERE
+         TripNumberRef = ?
+         AND LegNumberRef = ?
+SQL;
+   $res = runQuery($q, array($tripID, $legNumber));
+   return $res[0];
+}
+
+function getFlightLegs($tripID) {
    
    $q = <<<SQL
       SELECT
-         *
+         LegNumber,
+         Airplane.Type AS AirplaneName,
+         NumSeatsAvailable
       FROM
          Trip
          JOIN FlightLeg USING (TripNumber)
+         JOIN Airplane ON (FlightLeg.AirplaneId = Airplane.Id)
       WHERE
          Airline='Errfoil'
-         TripId = ?
+         AND TripNumber = ?
 SQL;
 
-   return runQuery($q, array($id));
+   $legs = runQuery($q, array($tripID));
+   $newlegs = array();
+
+   foreach ($legs as $leg) {
+      $newleg = $leg;
+      $newleg['arrival']   = getArrivalOrDeparture('arrival',   $tripID, $leg['LegNumber']);
+      $newleg['departure'] = getArrivalOrDeparture('departure', $tripID, $leg['LegNumber']);
+      $newlegs[] = $newleg;
+   }
+
+   return $newlegs;
+
 }

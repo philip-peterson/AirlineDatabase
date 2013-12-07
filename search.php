@@ -37,7 +37,7 @@ function displayResults($trips) {
 ?>
 
 
-<table border="1">
+<table border="1" class="tripresults">
    <tr>
       <th>From</th>
       <th>To</th>
@@ -45,6 +45,7 @@ function displayResults($trips) {
       <th>Time of Departure</th>
       <th>Stops</th>
       <th>Price</th>
+      <th>Number of Seats</th>
       <th>Action</th>
    </tr>
 
@@ -60,6 +61,7 @@ function displayResults($trips) {
             <td><?php echo $trip['TheDate']; ?></td>
             <td><?php echo $trip['ScheduleTime']; ?></td>
             <td><?php echo $trip['NumLegs']; ?></td>
+            <td><?php echo $trip['NumSeatsAvailable']; ?></td>
             <td>$<?php echo $trip['Price']; ?></td>
             <td align="center"><a href="trip.php?id=<?php echo (int)$trip['TripNumber']; ?>">Details / Purchase</a></td>
          
