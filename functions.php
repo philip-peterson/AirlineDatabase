@@ -197,7 +197,7 @@ SQL;
 
 }
 
-function getEmptyFlights() {
+function addFlight() {
    $q = <<<SQL
       SELECT
          LegNumber,
@@ -205,9 +205,9 @@ function getEmptyFlights() {
       FROM
          FlightLeg
       WHERE
-         
+         NumSeatsAvailable = (SELECT NumberOfSeats FROM Airplane WHERE Id=AirplaneId)
          AND Airline = 'Errfoil'
 SQL;
 
-   return runQuery($q, array($tripID));
+   return runQuery($q, array());
 }
